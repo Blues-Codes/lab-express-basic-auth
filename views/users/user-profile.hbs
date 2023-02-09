@@ -1,22 +1,12 @@
-{{!-- views/auth/login.hbs --}}
-
-<div id="form">
-  <h2>Login</h2>
-
-  <form action="/users/login" method="POST">
-
-    <label> Email
-      <input type="email" name="email" placeholder="rockstar@ironhack.com" />
-    </label>
-
-    <label>Password
-      <input type="password" name="password" placeholder="********" />
-    </label>
-
-    <button type="submit">Login</button>
-
-    {{#if errorMessage}}
-      <p class="error">{{errorMessage}}</p>
-    {{/if}}
-  </form>
-</div>
+{{#if user}}
+  <h2>Welcome, {{ user.username }}!</h2>
+  <p>This is your profile page my friend!</p>
+  <button>
+    <a href="/users/main">Head to Main page</a>
+  </button>
+   <button>
+    <a href="/users/private">click for a private message</a>
+  </button>
+{{else}}
+  <p>Still no logged in user, sorry!</p>
+{{/if}}

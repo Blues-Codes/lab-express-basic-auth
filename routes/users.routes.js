@@ -56,32 +56,24 @@ router.post('/signup', isLoggedOut,(req,res, next ) => {
 router.get('/login', (req,res,next) => {
   res.render('auth/login.hbs')
 });
-//main
-router.get('/main', (req, res, next) => {
-  res.render ('routes/main')
-});
-
-router.post('/main', (req, res, next) => {
-  res.redirect('/main')
-});
 
 //verification of user credentials
 router.post('/login', (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
  
-  if (!email || !password) {
+  if (!username || !password) {
     res.render('auth/login.hbs', {
-      errorMessage: 'Please enter both, email and password to login.'
+      errorMessage: 'Please enter both, username and password to login.'
     });
     return;
   }
  
-  User.findOne({ email })
+  User.findOne({ username })
     .then(user => {
       if (!user) {
-        res.render('auth/login', { errorMessage: 'Email is not registered. Try with other email.' });
+        res.render('auth/login', { errorMessage: 'Username is not registered. Try with other email.' });
         return;
-      } else if (bcryptjs.compareSync(password, user.passwordHash)) {
+      } else if (bcryptjs.compareSync(password, user.password)) {
         req.session.user = user
         console.log('SESSION =====> ', req.session);
         res.redirect('/users/profile');
@@ -103,6 +95,18 @@ req.session.destroy(err => {
 if (err) next(err);
 res.redirect('/');
 });
+
+//main
+router.get('/main', isLoggedIn, (req, res, next) => {
+  console.log('trying to get back to main',req.body)
+  res.render ('users/main.hbs')
+});
+
+//private
+router.get('/private',isLoggedIn,(req, res, next) => {
+  res.render('users/private.hbs')
+});
+
 });
 
 
